@@ -30,6 +30,11 @@ func NewRepository(cfg *config.Config) (*Repository, error) {
 	})
 
 	if err != nil {
+		logk.Get().Error("Failed to initialize database config", logkOption.Error(err))
+		return nil, errk.Trace(err)
+	}
+
+	if err := db.Init(); err != nil {
 		logk.Get().Error("Failed to connect to database", logkOption.Error(err))
 		return nil, errk.Trace(err)
 	}

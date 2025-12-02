@@ -21,6 +21,9 @@ func KonsultinAscii() string {
 '    |     ||     ||  |  |/  \ ||  :  ||     | |  |   |  | |  |  | __ |     ||   [_|  :  |
 '    |  .  ||     ||  |  |\    ||     ||     | |  |   |  | |  |  ||  ||     ||     |\   / 
 '    |__|\_| \___/ |__|__| \___| \__,_||_____| |__|  |____||__|__||__||_____||_____| \_/  
+'      
+'    Boilerplate created by Kenly Krisaguino - @kenly.krisaguino on Instagram
+'	 Version: 1.0.0
 '                                                                                         
 `
 }
