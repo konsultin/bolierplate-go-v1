@@ -22,6 +22,7 @@ RUN apk add --no-cache ca-certificates tzdata libgcc
 
 COPY --from=build /app/main .
 COPY config ./config
+COPY internal/api-route.yaml ./internal/api-route.yaml
 
 RUN mkdir -p /app/files
 

@@ -6,5 +6,4 @@ type HealthData struct {
 	Started      string            `json:"started"`
 	Env          string            `json:"env"`
 	Hostname     string            `json:"hostname"`
-	Dependencies map[string]string `json:"dependencies"`
 }

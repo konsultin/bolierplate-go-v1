@@ -24,7 +24,20 @@ func WithMetadata(metadata map[string]interface{}) SetOptionFn {
 
 func AddMetadata(key string, value interface{}) SetOptionFn {
 	return func(o *options) {
+		if o.metadata == nil {
+			o.metadata = make(map[string]interface{})
+		}
 		o.metadata[key] = value
+	}
+}
+
+// WithHTTPStatus attaches an HTTP status to the error metadata for downstream responders.
+func WithHTTPStatus(status int) SetOptionFn {
+	return func(o *options) {
+		if o.metadata == nil {
+			o.metadata = make(map[string]interface{})
+		}
+		o.metadata["http_status"] = status
 	}
 }
 

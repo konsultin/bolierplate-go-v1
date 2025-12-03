@@ -9,9 +9,9 @@ import (
 )
 
 type BaseField struct {
-	CreatedAt  time.Time       `db:"createdAt"`
-	UpdatedAt  time.Time       `db:"updatedAt"`
-	ModifiedBy *Subject        `db:"modifiedBy"`
+	CreatedAt  time.Time       `db:"created_at"`
+	UpdatedAt  time.Time       `db:"updated_at"`
+	ModifiedBy *Subject        `db:"modified_by"`
 	Version    int64           `db:"version"`
 	Metadata   json.RawMessage `db:"metadata"`
 }

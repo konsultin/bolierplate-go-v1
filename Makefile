@@ -9,20 +9,19 @@ MIGRATE ?= $(shell go env GOPATH)/bin/migrate
 -include .env
 export
 
-.PHONY: init db-up db-down db-script db-version bs
+.PHONY: setup-project init db-up db-down db-script db-version bs
 
-init:
+setup-project:
 	@read -p "Project name (no spaces): " NAME; \
 	if [ -z "$$NAME" ]; then echo "Project name is required"; exit 1; fi; \
 	MODULE="github.com/Konsultin/$$NAME"; \
 	echo "Setting module to $$MODULE"; \
 	go mod edit -module "$$MODULE"; \
 	find . -type f \( -name '*.go' -o -name 'go.mod' -o -name 'go.sum' -o -name '*.yaml' -o -name '*.yml' -o -name 'Makefile' -o -name '*.md' -o -name '*.env' \) -not -path './.git/*' -not -path './vendor/*' -print0 | xargs -0 sed -i "s#github.com/Konsultin/project-goes-here#$$MODULE#g"; \
-	echo "Running go mod tidy"; \
-	go mod tidy; \
-	echo "Installing migrate CLI"; \
-	go install github.com/golang-migrate/migrate/v4/cmd/migrate@latest; \
-	if [ -f .env.example ]; then cp .env.example .env; else echo ".env.example not found, skipping copy"; fi; \
+	if [ -f .env.example ] && [ ! -f .env ]; then \
+		echo "Creating .env from .env.example"; \
+		cp .env.example .env; \
+	fi; \
 	if [ -f .env ]; then \
 		if grep -q '^COMPOSE_PROJECT_NAME=' .env; then \
 			sed -i "s/^COMPOSE_PROJECT_NAME=.*/COMPOSE_PROJECT_NAME=$$NAME/" .env; \
@@ -36,8 +35,27 @@ init:
 		fi; \
 		echo "Set COMPOSE_PROJECT_NAME=$$NAME for container names"; \
 		echo "Set LOG_NAMESPACE=$$NAME"; \
+	else \
+		echo ".env not found; skipped updating COMPOSE_PROJECT_NAME/LOG_NAMESPACE"; \
 	fi; \
-	echo "Initialization completed"
+	echo "Project setup completed. Run 'make init' to finish initialization"; \
+	printf '\033[0;31m%s\033[0m\n' "Reminder: setup environment first (e.g. update .env) before running services"
+
+init:
+	@if grep -q '^module github.com/Konsultin/project-goes-here' go.mod; then \
+		echo "Project name is still the default. Run 'make setup-project' first."; \
+		exit 1; \
+	fi; \
+	if [ -f .env.example ] && [ ! -f .env ]; then \
+		echo "Creating .env from .env.example"; \
+		cp .env.example .env; \
+	fi; \
+	echo "Running go mod tidy"; \
+	go mod tidy; \
+	echo "Installing migrate CLI"; \
+	go install -tags "postgres,mysql" github.com/golang-migrate/migrate/v4/cmd/migrate@latest; \
+	echo "Initialization completed"; \
+	printf '\033[0;31m%s\033[0m\n' "Reminder: setup environment first (e.g. update .env) before running services"
 
 db-url = \
 if [ -z "$$DB_DRIVER" ]; then echo "DB_DRIVER is not set"; exit 1; fi; \
@@ -52,12 +70,12 @@ esac
 
 db-up:
 	@DB_URL=$$($(db-url)); \
-	echo "Migrating up with $$DB_URL"; \
+	echo "Migrating up..."; \
 	"$(MIGRATE)" -path "$(MIGRATIONS_DIR)" -database "$$DB_URL" up
 
 db-down:
 	@DB_URL=$$($(db-url)); \
-	echo "Migrating down 1 step with $$DB_URL"; \
+	echo "Migrating down 1 step..."; \
 	"$(MIGRATE)" -path "$(MIGRATIONS_DIR)" -database "$$DB_URL" down 1
 
 db-script:
@@ -69,9 +87,9 @@ db-script:
 
 db-version:
 	@DB_URL=$$($(db-url)); \
-	read -p "Migration Target: " VERSION; \
+	read -p "Target Migration Version: " VERSION; \
 	if [ -z "$$VERSION" ]; then echo "Version is required"; exit 1; fi; \
-	echo "Change Migration Version to $$VERSION with $$DB_URL"; \
+	echo "Change Migration version to $$VERSION"; \
 	"$(MIGRATE)" -path "$(MIGRATIONS_DIR)" -database "$$DB_URL" goto "$$VERSION"
 
 bs:

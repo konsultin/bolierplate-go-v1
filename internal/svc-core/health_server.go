@@ -8,15 +8,14 @@ import (
 )
 
 func (s *Server) HealthCheck(ctx *f.RequestCtx) (*dto.HealthData, error) {
-	uptime := time.Since(s.startedAt).String()
+	uptime := time.Since(s.startedAt)
 
 	data := dto.HealthData{
-		Status:       "ok",
-		Uptime:       uptime,
-		Started:      s.startedAt.UTC().Format(time.RFC3339),
-		Env:          s.config.Env,
-		Hostname:     string(ctx.Request.URI().Host()),
-		Dependencies: map[string]string{},
+		Status:   "HEALTHY",
+		Uptime:   uptime.String(),
+		Started:  s.startedAt.UTC().Format(time.RFC3339),
+		Env:      s.config.Env,
+		Hostname: string(ctx.Request.URI().Host()),
 	}
 
 	s.log.Debugf("Ran Health Check: %+v", data)

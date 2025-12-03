@@ -18,3 +18,8 @@ type Subject struct {
 	FullName string `json:"fullName"`
 	Role     string `json:"role"`
 }
+
+type Ref struct {
+	Id    int    `json:"id"`
+	Value string `json:"value"`
+}
