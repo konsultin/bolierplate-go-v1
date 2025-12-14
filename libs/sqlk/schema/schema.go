@@ -8,11 +8,18 @@ import (
 type Reference string
 
 type Schema struct {
-	tableName     string
-	autoIncrement bool
-	primaryKey    string
-	columns       map[string]int
-	as            string
+	tableName        string
+	autoIncrement    bool
+	primaryKey       string
+	columns          map[string]int
+	as               string
+	softDelete       bool
+	softDeleteColumn string
+	auditFields      bool
+	createdAtColumn  string
+	updatedAtColumn  string
+	createdByColumn  string
+	updatedByColumn  string
 }
 
 func (s *Schema) TableName() string {
@@ -92,6 +99,41 @@ func (s *Schema) Ref() Reference {
 	return Reference(s.tableName)
 }
 
+// SoftDelete returns whether soft delete is enabled for this schema
+func (s *Schema) SoftDelete() bool {
+	return s.softDelete
+}
+
+// SoftDeleteColumn returns the column name used for soft delete
+func (s *Schema) SoftDeleteColumn() string {
+	return s.softDeleteColumn
+}
+
+// AuditFields returns whether audit fields are enabled for this schema
+func (s *Schema) AuditFields() bool {
+	return s.auditFields
+}
+
+// CreatedAtColumn returns the column name for created_at
+func (s *Schema) CreatedAtColumn() string {
+	return s.createdAtColumn
+}
+
+// UpdatedAtColumn returns the column name for updated_at
+func (s *Schema) UpdatedAtColumn() string {
+	return s.updatedAtColumn
+}
+
+// CreatedByColumn returns the column name for created_by
+func (s *Schema) CreatedByColumn() string {
+	return s.createdByColumn
+}
+
+// UpdatedByColumn returns the column name for updated_by
+func (s *Schema) UpdatedByColumn() string {
+	return s.updatedByColumn
+}
+
 func New(args ...OptionSetterFn) *Schema {
 	// Evaluate options
 	o := evaluateSchemaOptions(args)
@@ -128,6 +170,13 @@ func New(args ...OptionSetterFn) *Schema {
 	// Set other options
 	s.autoIncrement = o.autoIncrement
 	s.as = o.as
+	s.softDelete = o.softDelete
+	s.softDeleteColumn = o.softDeleteColumn
+	s.auditFields = o.auditFields
+	s.createdAtColumn = o.createdAtColumn
+	s.updatedAtColumn = o.updatedAtColumn
+	s.createdByColumn = o.createdByColumn
+	s.updatedByColumn = o.updatedByColumn
 
 	// Check if primary key is defined in columns
 	if _, ok := s.columns[o.primaryKey]; !ok {

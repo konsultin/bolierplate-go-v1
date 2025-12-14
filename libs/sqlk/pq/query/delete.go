@@ -44,6 +44,18 @@ func (b *DeleteBuilder) Where(w sqlk.WhereWriter) *DeleteBuilder {
 }
 
 func Delete(s *schema.Schema) *DeleteBuilder {
+	// If soft delete is enabled, panic and direct user to use SoftDelete() instead
+	if s.SoftDelete() {
+		panic(fmt.Errorf("soft delete is enabled for schema %s. Use query.SoftDelete() for soft delete or query.ForceDelete() for hard delete", s.TableName()))
+	}
+
+	return &DeleteBuilder{
+		schema: s,
+	}
+}
+
+// ForceDelete creates a hard delete builder even if soft delete is enabled
+func ForceDelete(s *schema.Schema) *DeleteBuilder {
 	return &DeleteBuilder{
 		schema: s,
 	}
