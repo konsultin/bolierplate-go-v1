@@ -1,4 +1,4 @@
-SHELL := /bin/sh
+SHELL := bash.exe
 
 COMPOSE_FILE := deployment/docker/docker-compose.yaml
 COMPOSE := docker compose -f $(COMPOSE_FILE)

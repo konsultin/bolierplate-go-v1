@@ -16,6 +16,7 @@ type Repository struct {
 	db       *sqlk.Database
 	adapters *repositoryAdapters
 	log      logk.Logger
+	isClone  bool
 }
 
 func NewRepository(cfg *config.Config) (*Repository, error) {
@@ -71,7 +72,18 @@ func (r *Repository) Close() error {
 	if r == nil || r.db == nil {
 		return nil
 	}
+	if r.isClone {
+		return nil
+	}
 	return r.db.Close()
+}
+
+func (r *Repository) Connect(ctx context.Context) (*Repository, error) {
+	newR := *r
+	newR.isClone = true
+	// If you wanted to attach context or transaction here, you could.
+	// For now, it just returns a safe-to-close clone.
+	return &newR, nil
 }
 
 func (r *Repository) Ping(ctx context.Context) error {
