@@ -12,3 +12,5 @@ core:
       handler: HandleLoginPassword
     - post: /v1/users/sessions/google
       handler: HandleLoginGoogle
+    - post: /v1/simulation
+      handler: HandleTriggerSimulation

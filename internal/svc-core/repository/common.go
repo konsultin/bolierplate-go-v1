@@ -8,6 +8,7 @@ import (
 	"github.com/konsultin/project-goes-here/libs/errk"
 	"github.com/konsultin/project-goes-here/libs/logk"
 	logkOption "github.com/konsultin/project-goes-here/libs/logk/option"
+	"github.com/konsultin/project-goes-here/libs/natsk"
 	"github.com/konsultin/project-goes-here/libs/sqlk"
 )
 
@@ -17,10 +18,11 @@ type Repository struct {
 	log     logk.Logger
 	isClone bool
 	ctx     context.Context
+	nats    *natsk.Client
 	*repositoryAdapters
 }
 
-func NewRepository(cfg *config.Config) (*Repository, error) {
+func NewRepository(cfg *config.Config, nats *natsk.Client) (*Repository, error) {
 
 	db, err := sqlk.NewDatabase(sqlk.Config{
 		Driver:          cfg.DatabaseDriver,
@@ -61,6 +63,7 @@ func NewRepository(cfg *config.Config) (*Repository, error) {
 		config:             repoConfig,
 		db:                 db,
 		repositoryAdapters: adapters,
+		nats:               nats,
 		log:                logk.Get().NewChild(logkOption.WithNamespace("svc-core/repository")),
 	}
 
@@ -82,7 +85,7 @@ func (r *Repository) Close() error {
 func (r *Repository) Connect(ctx context.Context) (*Repository, error) {
 	newR := *r
 	newR.isClone = true
-	newR.ctx = ctx 
+	newR.ctx = ctx
 	return &newR, nil
 }
 

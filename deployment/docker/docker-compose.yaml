@@ -99,6 +99,13 @@ services:
       retries: 10
     restart: unless-stopped
 
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    restart: unless-stopped
+
 volumes:
   mysql_data:
   postgres_data:

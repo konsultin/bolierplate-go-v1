@@ -41,6 +41,9 @@ Base config lives in `.env.example`; copy to `.env` and adjust. Key variables:
 - Connection pool: `DB_MAX_IDLE_CONN`, `DB_MAX_OPEN_CONN`, `DB_MAX_CONN_LIFETIME`.
 - `DB_TIMEOUT_SECONDS`.
 
+### NATS & Worker
+- `NATS_URL` - NATS server URL (default: `nats://localhost:4222`).
+
 ### Docker
 - `COMPOSE_PROJECT_NAME` — Docker compose project name (set during setup).
 
@@ -142,6 +145,7 @@ Content-Type: application/json
 | `PUT` | `/v1/users/sessions` | Refresh user session |
 | `POST` | `/v1/users/sessions/login` | Login with password |
 | `POST` | `/v1/users/sessions/google` | Login with Google OAuth |
+| `POST` | `/v1/simulation` | Trigger Worker Simulation |
 
 ## Project Structure
 
@@ -162,12 +166,19 @@ Content-Type: application/json
 ├── libs/                   # Shared libraries
 │   ├── errk/               # Error handling
 │   ├── logk/               # Logging
+│   ├── natsk/              # NATS wrapper
 │   ├── sqlk/               # Database utilities
 │   └── timek/              # Time utilities
 └── migrations/             # Database migrations
 ```
 
 ## Changes
+
+> ### v1.2.0 - NATS Worker Integration
+> - Add NATS support for background workers
+> - Add `libs/natsk` wrapper
+> - Implement `Repo -> Publish -> NATS -> Consume -> Worker` flow
+> - Add Worker simulation endpoint
 
 > ### v1.1.0 - Authentication System
 > - Add flexible login (email/phone/username + password)

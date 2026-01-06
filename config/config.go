@@ -52,6 +52,9 @@ type Config struct {
 	DatabaseMaxOpenConn     int    `envconfig:"DB_MAX_OPEN_CONN" default:"100"`
 	DatabaseMaxConnLifetime int    `envconfig:"DB_MAX_CONN_LIFETIME" default:"300"`
 	DatabaseTimeoutSeconds  int    `envconfig:"DB_TIMEOUT_SECONDS" default:"5"`
+
+	// NATS Configuration
+	NatsUrl string `envconfig:"NATS_URL" default:"nats://localhost:4222"`
 }
 
 // Load reads environment variables (optionally from .env) into Config with defaults, and validates them.
@@ -116,6 +119,10 @@ func (c *Config) validate() error {
 	}
 	if c.DatabaseTimeoutSeconds <= 0 {
 		return fmt.Errorf("DB_TIMEOUT_SECONDS must be greater than zero")
+	}
+
+	if c.NatsUrl == "" {
+		return fmt.Errorf("NATS_URL is required")
 	}
 
 	return nil

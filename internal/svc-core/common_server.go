@@ -15,6 +15,7 @@ import (
 	"github.com/konsultin/project-goes-here/libs/errk"
 	"github.com/konsultin/project-goes-here/libs/logk"
 	logkOption "github.com/konsultin/project-goes-here/libs/logk/option"
+	"github.com/konsultin/project-goes-here/libs/natsk"
 	"github.com/konsultin/project-goes-here/libs/sqlk"
 	f "github.com/valyala/fasthttp"
 )
@@ -25,10 +26,16 @@ type Server struct {
 	svc       *service.Service
 	repo      *repository.Repository
 	log       logk.Logger
+	nats      *natsk.Client
 }
 
 func New(config *config.Config, startedAt time.Time) (*Server, error) {
-	repo, err := repository.NewRepository(config)
+	natsClient, err := natsk.New(config.NatsUrl)
+	if err != nil {
+		return nil, errk.Trace(err)
+	}
+
+	repo, err := repository.NewRepository(config, natsClient)
 	if err != nil {
 		return nil, errk.Trace(err)
 	}
@@ -41,6 +48,7 @@ func New(config *config.Config, startedAt time.Time) (*Server, error) {
 		svc:       svc,
 		repo:      repo,
 		log:       logk.Get().NewChild(logkOption.WithNamespace(constant.ServiceName + "/server")),
+		nats:      natsClient,
 	}
 
 	return server, nil
@@ -48,6 +56,7 @@ func New(config *config.Config, startedAt time.Time) (*Server, error) {
 }
 
 func (s *Server) Close() error {
+	s.nats.Close()
 	return s.repo.Close()
 }
 

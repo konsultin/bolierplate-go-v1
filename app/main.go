@@ -29,7 +29,7 @@ func konsultinAscii() string {
 '    |__|\_| \___/ |__|__| \___| \__,_||_____| |__|  |____||__|__||__||_____||_____| \_/  
 '      
 '    Boilerplate created by Kenly Krisaguino - @kenly.krisaguino on Instagram
-	 Version: 1.1.0
+	 Version: 1.2.0
 '                                                                                         
 	`
 }
@@ -61,6 +61,9 @@ func main() {
 	}()
 
 	resp := routek.NewResponder(cfg.Debug)
+
+	// Init Worker (NATS)
+	coreServer.InitWorker()
 
 	rt, err := routek.NewRouter(routek.Config{
 		Handlers:  map[string]any{"core": coreServer},
