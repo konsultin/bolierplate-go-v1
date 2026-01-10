@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 
 	"github.com/konsultin/project-goes-here/dto"
-	"github.com/konsultin/sqlk"
-	"github.com/konsultin/timek"
+	"github.com/go-konsultin/sqlk"
+	"github.com/go-konsultin/timek"
 )
 
 type BaseField struct {

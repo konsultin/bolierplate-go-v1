@@ -4,8 +4,8 @@ import (
 	"github.com/konsultin/project-goes-here/dto"
 	"github.com/konsultin/project-goes-here/internal/svc-core/model"
 	"github.com/konsultin/project-goes-here/internal/svc-core/pkg/svck"
-	"github.com/konsultin/errk"
-	logkOption "github.com/konsultin/logk/option"
+	"github.com/go-konsultin/errk"
+	logkOption "github.com/go-konsultin/logk/option"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 

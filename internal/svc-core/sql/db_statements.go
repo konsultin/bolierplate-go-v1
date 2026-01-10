@@ -1,6 +1,6 @@
 package coreSql
 
-import "github.com/konsultin/sqlk"
+import "github.com/go-konsultin/sqlk"
 
 type Statements struct {
 	User           *User

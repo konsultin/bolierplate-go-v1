@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/konsultin/errk"
+	"github.com/go-konsultin/errk"
 	fhttp "github.com/valyala/fasthttp"
 )
 

@@ -4,8 +4,8 @@ import (
 	"path"
 
 	"github.com/konsultin/project-goes-here/dto"
-	"github.com/konsultin/errk"
-	logkOption "github.com/konsultin/logk/option"
+	"github.com/go-konsultin/errk"
+	logkOption "github.com/go-konsultin/logk/option"
 )
 
 func (s *Service) mustComposeFileResult(assetType dto.AssetType_Enum, fileName string) *dto.File {

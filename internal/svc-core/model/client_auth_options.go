@@ -3,7 +3,7 @@ package model
 import (
 	"encoding/json"
 	"database/sql/driver"
-	"github.com/konsultin/sqlk"
+	"github.com/go-konsultin/sqlk"
 )
 
 type ClientAuthOptions struct {

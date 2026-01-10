@@ -3,10 +3,10 @@ package middleware
 import (
 	"fmt"
 
-	"github.com/konsultin/errk"
-	"github.com/konsultin/logk"
-	logkOption "github.com/konsultin/logk/option"
-	"github.com/konsultin/routek"
+	"github.com/go-konsultin/errk"
+	"github.com/go-konsultin/logk"
+	logkOption "github.com/go-konsultin/logk/option"
+	"github.com/go-konsultin/routek"
 	"github.com/valyala/fasthttp"
 )
 

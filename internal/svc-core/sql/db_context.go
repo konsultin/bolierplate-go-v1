@@ -2,7 +2,7 @@ package coreSql
 
 import (
 	"github.com/konsultin/project-goes-here/internal/svc-core/model"
-	"github.com/konsultin/sqlk/schema"
+	"github.com/go-konsultin/sqlk/schema"
 )
 
 // User Schemas

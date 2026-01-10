@@ -2,7 +2,7 @@ package errors
 
 import (
 	"github.com/konsultin/project-goes-here/internal/svc-core/constant"
-	"github.com/konsultin/errk"
+	"github.com/go-konsultin/errk"
 	fhttp "github.com/valyala/fasthttp"
 )
 

@@ -8,16 +8,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/konsultin/errk"
-	"github.com/konsultin/logk"
-	logkOption "github.com/konsultin/logk/option"
+	"github.com/go-konsultin/errk"
+	"github.com/go-konsultin/logk"
+	logkOption "github.com/go-konsultin/logk/option"
 	"github.com/konsultin/project-goes-here/config"
 	_ "github.com/konsultin/project-goes-here/docs" // Swagger docs
 
 	"github.com/konsultin/project-goes-here/internal/middleware"
 	svcCore "github.com/konsultin/project-goes-here/internal/svc-core"
 	"github.com/konsultin/project-goes-here/pkg/otel"
-	"github.com/konsultin/routek"
+	"github.com/go-konsultin/routek"
 	fasthttpSwagger "github.com/swaggo/fasthttp-swagger"
 	"github.com/valyala/fasthttp"
 )

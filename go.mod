@@ -5,20 +5,21 @@ go 1.24.0
 toolchain go1.24.11
 
 require (
+	github.com/go-konsultin/errk v0.2.1
+	github.com/go-konsultin/logk v0.2.1
+	github.com/go-konsultin/natsk v0.2.1
+	github.com/go-konsultin/routek v0.2.1
+	github.com/go-konsultin/sqlk v0.2.1
+	github.com/go-konsultin/timek v0.2.1
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/google/uuid v1.6.0
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/konsultin/errk v0.1.1
-	github.com/konsultin/logk v0.1.1
-	github.com/konsultin/natsk v0.1.1
-	github.com/konsultin/routek v0.1.1
-	github.com/konsultin/sqlk v0.1.1
-	github.com/konsultin/timek v0.1.1
 	github.com/matoous/go-nanoid/v2 v2.1.0
 	github.com/nats-io/nats.go v1.48.0
+	github.com/redis/go-redis/v9 v9.17.2
 	github.com/swaggo/fasthttp-swagger v1.0.2
 	github.com/swaggo/swag v1.16.6
 	github.com/valyala/fasthttp v1.69.0
@@ -62,7 +63,6 @@ require (
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/nats-io/nkeys v0.4.11 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
-	github.com/redis/go-redis/v9 v9.17.2 // indirect
 	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
 	github.com/swaggo/files/v2 v2.0.2 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

@@ -1,6 +1,6 @@
 package unaryHttpk
 
-import "github.com/konsultin/logk"
+import "github.com/go-konsultin/logk"
 
 var log logk.Logger
 

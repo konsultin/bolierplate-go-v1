@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	"github.com/konsultin/project-goes-here/config"
-	"github.com/konsultin/errk"
-	"github.com/konsultin/logk"
-	logkOption "github.com/konsultin/logk/option"
-	"github.com/konsultin/natsk"
-	"github.com/konsultin/sqlk"
+	"github.com/go-konsultin/errk"
+	"github.com/go-konsultin/logk"
+	logkOption "github.com/go-konsultin/logk/option"
+	"github.com/go-konsultin/natsk"
+	"github.com/go-konsultin/sqlk"
 )
 
 type Repository struct {

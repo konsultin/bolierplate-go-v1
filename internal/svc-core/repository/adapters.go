@@ -7,7 +7,7 @@ import (
 	"github.com/konsultin/project-goes-here/config"
 	"github.com/konsultin/project-goes-here/internal/svc-core/constant"
 	coreSql "github.com/konsultin/project-goes-here/internal/svc-core/sql"
-	"github.com/konsultin/sqlk"
+	"github.com/go-konsultin/sqlk"
 )
 
 type repositoryAdapters struct {

@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/konsultin/logk"
+	"github.com/go-konsultin/logk"
 	"github.com/valyala/fasthttp"
 )
 

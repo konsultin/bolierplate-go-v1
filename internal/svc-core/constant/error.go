@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/konsultin/errk"
+import "github.com/go-konsultin/errk"
 
 var (
 	CurrentAuthSessionExpired  = errk.NewError("E_AUTH_2", "Current session has expired")

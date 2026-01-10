@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/konsultin/logk"
-	"github.com/konsultin/routek"
+	"github.com/go-konsultin/logk"
+	"github.com/go-konsultin/routek"
 	"github.com/valyala/fasthttp"
 )
 

@@ -3,7 +3,7 @@ package repository
 import (
 	"github.com/konsultin/project-goes-here/dto"
 	"github.com/konsultin/project-goes-here/internal/svc-core/model"
-	"github.com/konsultin/errk"
+	"github.com/go-konsultin/errk"
 )
 
 // FindCredentialByKey finds a user credential by auth provider and key

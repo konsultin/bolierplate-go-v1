@@ -1,7 +1,7 @@
 package httpk
 
 import (
-	"github.com/konsultin/errk"
+	"github.com/go-konsultin/errk"
 	fhttp "github.com/valyala/fasthttp"
 )
 

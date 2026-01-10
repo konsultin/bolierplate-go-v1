@@ -2,8 +2,8 @@ package coreSql
 
 import (
 	"github.com/jmoiron/sqlx"
-	"github.com/konsultin/sqlk"
-	"github.com/konsultin/sqlk/pq/query"
+	"github.com/go-konsultin/sqlk"
+	"github.com/go-konsultin/sqlk/pq/query"
 )
 
 type AuthSessionSql struct {

@@ -4,7 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/konsultin/project-goes-here/dto"
-	"github.com/konsultin/timek"
+	"github.com/go-konsultin/timek"
 )
 
 type UserCredential struct {
