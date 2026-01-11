@@ -172,7 +172,7 @@ make db-down
 
 ## 📦 Features
 
-- **Authentication**: JWT & Session-based auth, OAuth (Google/Facebook/Apple).
+- **Authentication**: JWT & Redis-based Session auth, OAuth (Google).
 - **Storage**: MinIO/S3 integration for file uploads.
 - **Workers**: Async background jobs using NATS.
 - **Observability**: OpenTelemetry (OTel) traces & Structured Logging.
@@ -188,12 +188,20 @@ make db-down
 
 ## Changelog
 
+### v0.7.2 - Redis Session Storage
+- Migrated User Session storage from PostgreSQL to Redis
+- Implemented `DeleteSessionByXid` for Redis compatibility
+- Refactored `GetDownloadFileUrl` to `repository/file.go`
+- Implemented MinIO S3 for file downloads with configurable expiry
+- Updated `pkg/redis` to be context-aware
+- Consolidated Database migrations (removed `auth_session`, merged `user_credential`)
+- Updated to Go 1.24+
+
 ### v0.7.1 - Documentation & Cleanup
 - Added comprehensive `README.md` documentation
 - Added Architecture Overview diagram and description
 - Corrected 3rd party API package location to `internal/svc-core/pkg/`
 - Verified and fixed `.env.example` keys
-- Codebase version bumped to 0.7.1
 
 ### v0.7.0 - MinIO Storage
 - Added `pkg/storage` helper for MinIO/S3 compatible storage

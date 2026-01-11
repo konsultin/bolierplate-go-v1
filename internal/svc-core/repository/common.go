@@ -4,12 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/konsultin/project-goes-here/config"
 	"github.com/go-konsultin/errk"
 	"github.com/go-konsultin/logk"
 	logkOption "github.com/go-konsultin/logk/option"
 	"github.com/go-konsultin/natsk"
 	"github.com/go-konsultin/sqlk"
+	"github.com/konsultin/project-goes-here/config"
+	"github.com/konsultin/project-goes-here/pkg/redis"
+	"github.com/konsultin/project-goes-here/pkg/storage"
 )
 
 type Repository struct {
@@ -19,6 +21,8 @@ type Repository struct {
 	isClone bool
 	ctx     context.Context
 	nats    *natsk.Client
+	redis   *redis.Client
+	storage *storage.Client
 	*repositoryAdapters
 }
 
@@ -59,11 +63,37 @@ func NewRepository(cfg *config.Config, nats *natsk.Client) (*Repository, error) 
 		return nil, errk.Trace(err)
 	}
 
+	rdb, err := redis.New(redis.Config{
+		Host:     cfg.RedisHost,
+		Port:     cfg.RedisPort,
+		Password: cfg.RedisPassword,
+		DB:       cfg.RedisDB,
+	})
+	if err != nil {
+		logk.Get().Error("Failed to connect to redis", logkOption.Error(errk.Trace(err)))
+		return nil, errk.Trace(err)
+	}
+
+	minioClient, err := storage.New(storage.Config{
+		Endpoint:  cfg.MinioEndpoint,
+		AccessKey: cfg.MinioAccessKey,
+		SecretKey: cfg.MinioSecretKey,
+		Bucket:    cfg.MinioBucket,
+		UseSSL:    cfg.MinioUseSSL,
+		Region:    cfg.MinioRegion,
+	})
+	if err != nil {
+		logk.Get().Error("Failed to init minio client", logkOption.Error(errk.Trace(err)))
+		return nil, errk.Trace(err)
+	}
+
 	var r = Repository{
 		config:             repoConfig,
 		db:                 db,
 		repositoryAdapters: adapters,
 		nats:               nats,
+		redis:              rdb,
+		storage:            minioClient,
 		log:                logk.Get().NewChild(logkOption.WithNamespace("svc-core/repository")),
 	}
 
@@ -79,6 +109,9 @@ func (r *Repository) Close() error {
 	if r.isClone {
 		return nil
 	}
+	if err := r.redis.Close(); err != nil {
+		return err
+	}
 	return r.db.Close()
 }
 
@@ -86,6 +119,8 @@ func (r *Repository) Connect(ctx context.Context) (*Repository, error) {
 	newR := *r
 	newR.isClone = true
 	newR.ctx = ctx
+	newR.redis = r.redis.WithContext(ctx)
+	// storage client methods accept context, so no need to clone/withContext
 	return &newR, nil
 }
 

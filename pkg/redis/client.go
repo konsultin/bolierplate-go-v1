@@ -11,6 +11,7 @@ import (
 // Client wraps the Redis client with helper methods.
 type Client struct {
 	rdb *redis.Client
+	ctx context.Context
 }
 
 // Config holds Redis connection configuration.
@@ -61,7 +62,17 @@ func New(cfg Config) (*Client, error) {
 		return nil, fmt.Errorf("redis ping failed: %w", err)
 	}
 
-	return &Client{rdb: rdb}, nil
+	return &Client{rdb: rdb, ctx: context.Background()}, nil
+}
+
+// WithContext returns a shallow copy of the client with the given context.
+func (c *Client) WithContext(ctx context.Context) *Client {
+	if c == nil {
+		return nil
+	}
+	newC := *c
+	newC.ctx = ctx
+	return &newC
 }
 
 // Close closes the Redis connection.

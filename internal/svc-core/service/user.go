@@ -6,14 +6,14 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-konsultin/errk"
+	logkOption "github.com/go-konsultin/logk/option"
 	"github.com/konsultin/project-goes-here/dto"
 	"github.com/konsultin/project-goes-here/internal/svc-core/constant"
 	"github.com/konsultin/project-goes-here/internal/svc-core/model"
 	"github.com/konsultin/project-goes-here/internal/svc-core/pkg/httpk"
 	unaryHttpk "github.com/konsultin/project-goes-here/internal/svc-core/pkg/httpk/unary"
 	"github.com/konsultin/project-goes-here/internal/svc-core/pkg/svck"
-	"github.com/go-konsultin/errk"
-	logkOption "github.com/go-konsultin/logk/option"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -123,9 +123,9 @@ func (s *Service) RefreshUserSession(payload *dto.RefreshSession_Payload) (*dto.
 	}
 
 	// Delete previous session
-	err = s.repo.DeleteSessionById(session.Id)
+	err = s.repo.DeleteSessionByXid(session.Xid)
 	if err != nil {
-		s.log.Error("Unable to delete previous session. SessionId=%d", logkOption.Error(err), logkOption.Format(session.Id))
+		s.log.Error("Unable to delete previous session. SessionXid=%s", logkOption.Error(err), logkOption.Format(session.Xid))
 		return nil, errk.Trace(err)
 	}
 
@@ -144,7 +144,7 @@ func (s *Service) isValidAuthSession(session *model.AuthSession) error {
 	case dto.ControlStatus_INACTIVE:
 		if s.config.FeatureFlagSingleDevice {
 			// Delete current session
-			err := s.DeleteSession(session.Id)
+			err := s.DeleteSession(session.Xid)
 			if err != nil {
 				return errk.Trace(err)
 			}
@@ -159,8 +159,8 @@ func (s *Service) isValidAuthSession(session *model.AuthSession) error {
 	return nil
 }
 
-func (s *Service) DeleteSession(sessionId int64) error {
-	err := s.repo.DeleteSessionById(sessionId)
+func (s *Service) DeleteSession(xid string) error {
+	err := s.repo.DeleteSessionByXid(xid)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return constant.ResourceNotFound

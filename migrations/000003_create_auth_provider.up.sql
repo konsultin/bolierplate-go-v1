@@ -10,6 +10,4 @@ CREATE TABLE IF NOT EXISTS auth_provider (
 -- Insert default auth providers
 INSERT INTO auth_provider (id, name, description) VALUES
     (1, 'PASSWORD', 'Email/Phone/Username with password authentication'),
-    (2, 'GOOGLE', 'Google OAuth authentication'),
-    (3, 'FACEBOOK', 'Facebook OAuth authentication'),
-    (4, 'APPLE', 'Apple Sign In authentication');
+    (2, 'GOOGLE', 'Google OAuth authentication');
