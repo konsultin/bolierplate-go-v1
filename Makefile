@@ -10,7 +10,7 @@ MIGRATE ?= $(shell go env GOPATH)/bin/migrate
 -include .env
 export
 
-.PHONY: setup-project init run lint tidy dev up down db-up db-down db-script db-version bs swagger
+.PHONY: setup-project init run lint tidy dev up down db-up db-down db-script db-version bs swagger test test-coverage
 
 swagger:
 	@echo "Generating Swagger docs..."
@@ -62,6 +62,17 @@ init:
 	fi; \
 	if grep -q "CRON_USERNAME=" .env; then echo "CRON_USERNAME already set"; else echo "CRON_USERNAME=admin" >> .env; fi; \
 	if grep -q "CRON_PASSWORD=" .env; then echo "CRON_PASSWORD already set"; else rand_pass=$$(openssl rand -hex 5); echo "CRON_PASSWORD=$$rand_pass" >> .env; echo "Generated CRON_PASSWORD: $$rand_pass"; fi; \
+	if grep -q "^JWT_SECRET=" .env && ! grep -q "^JWT_SECRET=your-secret-key-here" .env; then \
+		echo "JWT_SECRET already set"; \
+	else \
+		jwt_secret=$$(openssl rand -base64 32); \
+		if grep -q "^JWT_SECRET=" .env; then \
+			sed -i "s|^JWT_SECRET=.*|JWT_SECRET=$$jwt_secret|" .env; \
+		else \
+			echo "JWT_SECRET=$$jwt_secret" >> .env; \
+		fi; \
+		echo "Generated JWT_SECRET"; \
+	fi; \
 	echo "Initialization completed"; \
 	printf '\033[0;31m%s\033[0m\n' "Reminder: setup environment first (e.g. update .env) before running services"
 
@@ -134,3 +145,14 @@ bs:
 	fi; \
 	echo "DB_DRIVER=$${DB_DRIVER:-unset} -> running profile '$$profile'"; \
 	$(COMPOSE) --profile $$profile up -d
+
+test:
+	@echo "Running unit tests..."
+	go test -v -cover ./...
+
+test-coverage:
+	@echo "Running tests with coverage report..."
+	go test -v -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out -o coverage.html
+	@echo "Coverage report generated: coverage.html"
+

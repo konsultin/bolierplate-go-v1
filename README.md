@@ -188,6 +188,12 @@ make db-down
 
 ## Changelog
 
+### v0.7.4 - Developer Experience
+- Added `make test` and `make test-coverage` commands for unit testing
+- Auto-generate secure `JWT_SECRET` during `make init` (replaces placeholder)
+- Updated Dockerfile to Go 1.24 (aligned with README spec)
+- Added `coverage.out` and `coverage.html` to `.gitignore`
+
 ### v0.7.3 - Production Readiness
 - Enabled Redis AOF (Append Only File) persistence in `docker-compose.yaml` for data durability
 - Clarified MinIO vs S3 usage in documentation
