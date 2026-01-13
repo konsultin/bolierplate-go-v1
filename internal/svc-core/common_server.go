@@ -5,6 +5,11 @@ import (
 	"errors"
 	"time"
 
+	"github.com/go-konsultin/errk"
+	"github.com/go-konsultin/logk"
+	logkOption "github.com/go-konsultin/logk/option"
+	"github.com/go-konsultin/natsk"
+	"github.com/go-konsultin/sqlk"
 	"github.com/konsultin/project-goes-here/config"
 	"github.com/konsultin/project-goes-here/internal/svc-core/constant"
 	"github.com/konsultin/project-goes-here/internal/svc-core/model"
@@ -12,11 +17,6 @@ import (
 	unaryHttpk "github.com/konsultin/project-goes-here/internal/svc-core/pkg/httpk/unary"
 	"github.com/konsultin/project-goes-here/internal/svc-core/repository"
 	"github.com/konsultin/project-goes-here/internal/svc-core/service"
-	"github.com/go-konsultin/errk"
-	"github.com/go-konsultin/logk"
-	logkOption "github.com/go-konsultin/logk/option"
-	"github.com/go-konsultin/natsk"
-	"github.com/go-konsultin/sqlk"
 	f "github.com/valyala/fasthttp"
 )
 
@@ -82,7 +82,7 @@ func (s *Server) NewService(ctx *f.RequestCtx) (*service.Service, error) {
 }
 
 func (s *Server) wrapError(ctx *f.RequestCtx, err error) error {
-	s.log.Errorf("Error returned from Service. ErrorType=%T %v", err, logkOption.Context(ctx), logkOption.Format(err))
+	s.log.Errorf("Error returned from Service. ErrorType=%T Error=%+v", err, err)
 
 	// Handle cancellation error
 	if errors.Is(err, context.Canceled) {

@@ -34,8 +34,8 @@ github.com/go-konsultin/natsk v0.2.1 h1:HxLBThZF4b8Ihosn9K4997E2a5GIoCHtkfndR3Og
 github.com/go-konsultin/natsk v0.2.1/go.mod h1:mjAJrGFaQT3w7lI4xxeSGCXutK2MXzwS6aBonZqGqoQ=
 github.com/go-konsultin/routek v0.2.1 h1:FRuLMx57UQlViHi8ABqpgoPiUnrLfLgnU/v5Zo4pX2U=
 github.com/go-konsultin/routek v0.2.1/go.mod h1:e53cMwkBGcnNEpevIRrWP8dJ6Xlfhz9zcOipyaL0R6M=
-github.com/go-konsultin/sqlk v0.2.1 h1:4TGpgpKXFcb4pP1MjFUXdQtwAr56Lh1qFe/Z9t+gh5I=
-github.com/go-konsultin/sqlk v0.2.1/go.mod h1:xdlh8IURxUKtN3V/rAzDZgL6ZJjZ/s6m63YvWBQRW2s=
+github.com/go-konsultin/sqlk v0.2.2 h1:+K55LVwnjZOI0aIs8JPQrUB1HRluW9lMjVUd688xVZw=
+github.com/go-konsultin/sqlk v0.2.2/go.mod h1:xdlh8IURxUKtN3V/rAzDZgL6ZJjZ/s6m63YvWBQRW2s=
 github.com/go-konsultin/timek v0.2.1 h1:vu0+UmJ+0vzVp2LDwbcMDgAjV7GHEA+7VRuAnOhhzSA=
 github.com/go-konsultin/timek v0.2.1/go.mod h1:6Qu+mt3k3uINis4NPid6RVCQQtu07A0K8Lz2gnXcRpY=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=

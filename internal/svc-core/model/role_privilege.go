@@ -10,9 +10,9 @@ type RolePrivilege struct {
 }
 
 type RolePrivilegeJoinRow struct {
-	RolePrivilege *RolePrivilege `db:"rolePrivilege"`
-	Role          *Role          `db:"role"`
-	Privilege     *Privilege     `db:"privilege"`
+	RolePrivilege *RolePrivilege `db:"RolePrivilege"`
+	Role          *Role          `db:"Role"`
+	Privilege     *Privilege     `db:"Privilege"`
 }
 
 func NewRolePrivilege(privilegeId int64, s *dto.Subject) *RolePrivilege {

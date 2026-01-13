@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 
+	unaryHttpk "github.com/konsultin/project-goes-here/internal/svc-core/pkg/httpk/unary"
 	"github.com/valyala/fasthttp"
 )
 
@@ -30,6 +31,7 @@ func Init(cfg Config) (handler func(ctx *fasthttp.RequestCtx), err error) {
 		Logging(cfg.Logger, metrics),
 		RateLimit(rl, cfg.Logger, cfg.OnError),
 		CORS(cfg.CORSAllowOrigins),
+		unaryHttpk.AuthorizationMiddleware,
 	)
 
 	return handler, nil
