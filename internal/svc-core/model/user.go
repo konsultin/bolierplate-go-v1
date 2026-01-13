@@ -11,12 +11,12 @@ type User struct {
 	Id       int64                  `db:"id"`
 	Xid      string                 `db:"xid"`
 	Username sql.NullString         `db:"username"`
-	FullName string                 `db:"full_name"`
+	FullName string                 `db:"fullName"`
 	Phone    sql.NullString         `db:"phone"`
 	Email    sql.NullString         `db:"email"`
 	Age      sql.NullString         `db:"age"`
 	Avatar   sql.NullString         `db:"avatar"`
-	StatusId dto.ControlStatus_Enum `db:"status_id"`
+	StatusId dto.ControlStatus_Enum `db:"statusId"`
 }
 
 func NewUser() *User {

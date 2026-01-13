@@ -39,7 +39,7 @@ func konsultinAscii() string {
 }
 
 // @title           Konsultin API Boilerplate
-// @version         0.7.1
+// @version         0.7.5
 // @description     This is a sample server for Konsultin API Boilerplate.
 // @termsOfService  http://swagger.io/terms/
 

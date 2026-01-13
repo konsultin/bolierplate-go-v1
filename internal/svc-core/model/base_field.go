@@ -3,15 +3,15 @@ package model
 import (
 	"encoding/json"
 
-	"github.com/konsultin/project-goes-here/dto"
 	"github.com/go-konsultin/sqlk"
 	"github.com/go-konsultin/timek"
+	"github.com/konsultin/project-goes-here/dto"
 )
 
 type BaseField struct {
-	CreatedAt  timek.Time      `db:"created_at"`
-	UpdatedAt  timek.Time      `db:"updated_at"`
-	ModifiedBy *Subject        `db:"modified_by"`
+	CreatedAt  timek.Time      `db:"createdAt"`
+	UpdatedAt  timek.Time      `db:"updatedAt"`
+	ModifiedBy *Subject        `db:"modifiedBy"`
 	Version    int64           `db:"version"`
 	Metadata   json.RawMessage `db:"metadata"`
 }

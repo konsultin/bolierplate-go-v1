@@ -102,13 +102,7 @@ Initialize the environment and services.
 make bs
 ```
 
-### 5. Start Services
-Bring up the Docker services.
-```bash
-make up
-```
-
-### 6. Run Migrations & Start Application
+### 5. Run Migrations & Start Application
 ```bash
 # Apply Database Migrations
 make db-up
@@ -152,6 +146,29 @@ make db-up
 make db-down
 ```
 
+### Table & Column Naming Convention
+
+> [!IMPORTANT]
+> All database tables **must use PascalCase** naming that matches Go struct names, and columns **must use camelCase**.
+
+The `sqlk` library uses Go struct names as table names and struct fields as column names. Example:
+
+| Go Struct | Table Name | Column Name Example |
+|-----------|------------|---------------------|
+| `model.User` | `"User"` | `FullName` -> `"fullName"` |
+| `model.UserCredential` | `"UserCredential"` | `UserId` -> `"userId"` |
+| `model.ClientAuth` | `"ClientAuth"` | `ClientId` -> `"clientId"` |
+
+When writing migrations, always use quoted PascalCase for tables and camelCase for columns:
+```sql
+CREATE TABLE IF NOT EXISTS "User" (
+    "id" BIGSERIAL PRIMARY KEY,
+    "fullName" VARCHAR(255) NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ...
+);
+```
+
 ### API Documentation (Swagger)
 
 1.  **Annotate Handlers**: Add comments above your handler functions.
@@ -187,6 +204,14 @@ make db-down
 5.  Open a Pull Request.
 
 ## Changelog
+
+### v0.7.5 - Migration Convention
+- Updated all migrations to use PascalCase table names (`"User"`) and camelCase column names (`"userId"`) to match Go struct casing
+- Added `NATS_URL`, `REDIS_HOST`, `OTEL_COLLECTOR_ENDPOINT`, `MINIO_ENDPOINT` to docker-compose for container networking
+- Added NATS healthcheck and dependency ordering
+- Added `docker-db-up` Makefile target for running migrations against Docker database
+- Removed duplicate `make up` target (use `make bs` instead)
+- Random `CRON_USERNAME` generation during `make init`
 
 ### v0.7.4 - Developer Experience
 - Added `make test` and `make test-coverage` commands for unit testing

@@ -7,7 +7,6 @@ type Statements struct {
 	UserCredential *UserCredentialSql
 	ClientAuth     *ClientAuth
 	Role           *Role
-	AuthSession    *AuthSessionSql
 }
 
 func New(db *sqlk.DatabaseContext) *Statements {
@@ -16,6 +15,5 @@ func New(db *sqlk.DatabaseContext) *Statements {
 		UserCredential: NewUserCredential(db),
 		ClientAuth:     NewClientAuth(db),
 		Role:           NewRole(db),
-		AuthSession:    NewAuthSession(db),
 	}
 }

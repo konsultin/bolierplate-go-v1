@@ -1,8 +1,6 @@
 module github.com/konsultin/project-goes-here
 
-go 1.24.0
-
-toolchain go1.24.11
+go 1.25.5
 
 require (
 	github.com/go-konsultin/errk v0.2.1

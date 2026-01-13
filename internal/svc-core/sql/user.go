@@ -1,9 +1,9 @@
 package coreSql
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/go-konsultin/sqlk"
 	"github.com/go-konsultin/sqlk/pq/query"
+	"github.com/jmoiron/sqlx"
 )
 
 type User struct {
@@ -33,19 +33,36 @@ func NewUser(db *sqlk.DatabaseContext) *User {
 					query.Equal(query.Column("id")),
 				).Build(),
 		),
-		FindByIdentifier: db.MustPrepareRebind(`
-			SELECT * FROM "user"
-			WHERE email = ? OR phone = ? OR username = ?
-			LIMIT 1
-		`),
-		Insert: db.MustPrepareNamed(`
-			INSERT INTO "user" (
-				xid, username, full_name, email, phone, age, avatar, status_id,
-				created_at, updated_at, modified_by, version, metadata
-			) VALUES (
-				:xid, :username, :full_name, :email, :phone, :age, :avatar, :status_id,
-				:created_at, :updated_at, :modified_by, :version, :metadata
-			) RETURNING id
-		`),
+		FindByIdentifier: db.MustPrepareRebind(
+			query.Select(
+				query.Column("*"),
+			).
+				From(UserSchema).
+				Where(
+					query.Or(
+						query.Equal(query.Column("email")),
+						query.Equal(query.Column("phone")),
+						query.Equal(query.Column("username")),
+					),
+				).
+				Limit(1).Build(),
+		),
+		Insert: db.MustPrepareNamed(
+			query.Insert(UserSchema,
+				"xid",
+				"username",
+				"fullName",
+				"email",
+				"phone",
+				"age",
+				"avatar",
+				"statusId",
+				"createdAt",
+				"updatedAt",
+				"modifiedBy",
+				"version",
+				"metadata",
+			).Build(),
+		),
 	}
 }

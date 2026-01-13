@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS auth_provider;
+DROP TABLE IF EXISTS "AuthProvider";

@@ -1,4 +1,3 @@
-version: "3.9"
 
 x-app-base: &app-base
   image: ${COMPOSE_PROJECT_NAME:-api-template}-core
@@ -31,8 +30,14 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+      NATS_URL: nats://nats:4222
+      REDIS_HOST: redis
+      OTEL_COLLECTOR_ENDPOINT: jaeger:4317
+      MINIO_ENDPOINT: minio:9000
     depends_on:
       mysql:
+        condition: service_healthy
+      nats:
         condition: service_healthy
 
   mysql:
@@ -73,8 +78,14 @@ services:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+      NATS_URL: nats://nats:4222
+      REDIS_HOST: redis
+      OTEL_COLLECTOR_ENDPOINT: jaeger:4317
+      MINIO_ENDPOINT: minio:9000
     depends_on:
       postgres:
+        condition: service_healthy
+      nats:
         condition: service_healthy
 
   postgres:
@@ -108,6 +119,12 @@ services:
     ports:
       - "${NATS_PORT:-4222}:4222"
       - "${NATS_MONITOR_PORT:-8222}:8222"
+    healthcheck:
+      test: ["CMD", "nats-server", "--help"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
     restart: unless-stopped
 
   jaeger:

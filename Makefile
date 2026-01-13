@@ -10,7 +10,7 @@ MIGRATE ?= $(shell go env GOPATH)/bin/migrate
 -include .env
 export
 
-.PHONY: setup-project init run lint tidy dev up down db-up db-down db-script db-version bs swagger test test-coverage
+.PHONY: setup-project init run lint tidy dev bs down db-up db-down db-script db-version docker-db-up swagger test test-coverage
 
 swagger:
 	@echo "Generating Swagger docs..."
@@ -60,8 +60,8 @@ init:
 		echo "Installing air for dev hot-reload"; \
 		go install github.com/air-verse/air@latest; \
 	fi; \
-	if grep -q "CRON_USERNAME=" .env; then echo "CRON_USERNAME already set"; else echo "CRON_USERNAME=admin" >> .env; fi; \
-	if grep -q "CRON_PASSWORD=" .env; then echo "CRON_PASSWORD already set"; else rand_pass=$$(openssl rand -hex 5); echo "CRON_PASSWORD=$$rand_pass" >> .env; echo "Generated CRON_PASSWORD: $$rand_pass"; fi; \
+	if grep -qE "^CRON_USERNAME=.+" .env; then echo "CRON_USERNAME already set"; else sed -i '/^CRON_USERNAME=/d' .env; rand_user=$$(openssl rand -hex 5); echo "CRON_USERNAME=$$rand_user" >> .env; echo "Generated CRON_USERNAME: $$rand_user"; fi; \
+	if grep -qE "^CRON_PASSWORD=.+" .env; then echo "CRON_PASSWORD already set"; else sed -i '/^CRON_PASSWORD=/d' .env; rand_pass=$$(openssl rand -hex 5); echo "CRON_PASSWORD=$$rand_pass" >> .env; echo "Generated CRON_PASSWORD: $$rand_pass"; fi; \
 	if grep -q "^JWT_SECRET=" .env && ! grep -q "^JWT_SECRET=your-secret-key-here" .env; then \
 		echo "JWT_SECRET already set"; \
 	else \
@@ -91,19 +91,11 @@ dev:
 	echo "Starting dev server with air..."; \
 	$(AIR) -c .air.toml
 
-up:
-	@profile="mysql"; \
-	if [ "$${DB_DRIVER}" = "postgres" ] || [ "$${DB_DRIVER}" = "postgresql" ] || [ "$${DB_DRIVER}" = "pg" ]; then \
-		profile="postgres"; \
-	fi; \
-	echo "DB_DRIVER=$${DB_DRIVER:-unset} -> running profile '$$profile'"; \
-	$(COMPOSE) --profile $$profile up -d
-
 down:
 	@echo "Stopping docker compose stack..."; \
 	$(COMPOSE) down
 
-	db-url = \
+db-url = \
 	if [ -z "$$DB_DRIVER" ]; then echo "DB_DRIVER is not set"; exit 1; fi; \
 	case "$$DB_DRIVER" in \
 		mysql|mariadb) \
@@ -137,6 +129,16 @@ db-version:
 	if [ -z "$$VERSION" ]; then echo "Version is required"; exit 1; fi; \
 	echo "Change Migration version to $$VERSION"; \
 	"$(MIGRATE)" -path "$(MIGRATIONS_DIR)" -database "$$DB_URL" goto "$$VERSION"
+
+docker-db-up:
+	@echo "Running migrations inside Docker network..."; \
+	if [ "$${DB_DRIVER}" = "postgres" ] || [ "$${DB_DRIVER}" = "postgresql" ] || [ "$${DB_DRIVER}" = "pg" ]; then \
+		DB_URL="postgres://$${DB_USERNAME}:$${DB_PASSWORD}@postgres:5432/$${DB_NAME}?sslmode=disable"; \
+	else \
+		DB_URL="mysql://$${DB_USERNAME}:$${DB_PASSWORD}@tcp(mysql:3306)/$${DB_NAME}?parseTime=true"; \
+	fi; \
+	docker run --rm -v "$$(pwd)/$(MIGRATIONS_DIR):/migrations" --network $${COMPOSE_PROJECT_NAME:-api-template}_default migrate/migrate \
+		-path=/migrations -database "$$DB_URL" up
 
 bs:
 	@profile="mysql"; \

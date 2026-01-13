@@ -1,9 +1,9 @@
 package coreSql
 
 import (
-	"github.com/jmoiron/sqlx"
 	"github.com/go-konsultin/sqlk"
 	"github.com/go-konsultin/sqlk/pq/query"
+	"github.com/jmoiron/sqlx"
 )
 
 type UserCredentialSql struct {
@@ -36,19 +36,22 @@ func NewUserCredential(db *sqlk.DatabaseContext) *UserCredentialSql {
 					query.Equal(query.Column("user_id")),
 				).Build(),
 		),
-		Insert: db.MustPrepareNamed(`
-			INSERT INTO user_credential (
-				user_id, auth_provider_id, credential_key, credential_secret,
-				is_verified, verified_at, created_at, updated_at
-			) VALUES (
-				:user_id, :auth_provider_id, :credential_key, :credential_secret,
-				:is_verified, :verified_at, :created_at, :updated_at
-			) RETURNING id
-		`),
+		Insert: db.MustPrepareNamed(
+			query.Insert(UserCredentialSchema,
+				"userId",
+				"authProviderId",
+				"credentialKey",
+				"credentialSecret",
+				"isVerified",
+				"verifiedAt",
+				"createdAt",
+				"updatedAt",
+			).Build(),
+		),
 		UpdateSecret: db.MustPrepareRebind(`
-			UPDATE user_credential
-			SET credential_secret = ?, updated_at = NOW()
-			WHERE id = ?
+			UPDATE "UserCredential"
+			SET "credentialSecret" = ?, "updatedAt" = NOW()
+			WHERE "id" = ?
 		`),
 	}
 }
